@@ -8,8 +8,11 @@
 #define AP_Name "Kozakkenboys"
 #define AP_Password "VierdeElftal"
 
-#define payload_on "{\"on\": true}"
+String json_on_b = "{\"on\": true, \"hue\": ";
+String json_on_e = "}";
+#define payload_on"{\"on\": true}"
 #define payload_off "{\"on\": false}"
+String On_Hue(int hue);
 
 #define bridgeUrl "http://192.168.1.179/api/wn3lnOTtZXlD0hueqBcddsqFsnVhSzvzvmKC0nk0/lights/8/state"
 #define toggle_delay 3000
@@ -38,8 +41,9 @@ void loop() {
   int httpCode = -1;
 
   if (on_off) {
-    httpCode = http.sendRequest("PUT", payload_on);     
-  } else {
+    int rnd = random(0, 65535);
+    httpCode = http.sendRequest("PUT", On_Hue(rnd));     
+  } else {    
     httpCode = http.sendRequest("PUT", payload_off); 
   }
    
@@ -57,3 +61,8 @@ void loop() {
 
   delay(toggle_delay);
 }
+
+String On_Hue(int hue){
+  return (json_on_b + hue + json_on_e);
+}
+
